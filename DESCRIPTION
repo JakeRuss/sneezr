@@ -9,3 +9,10 @@ License: to be determined
 LazyData: TRUE
 URL: https://github.com/JakeRuss/sneezr
 BugReports: https://github.com/JakeRuss/sneezr/issues
+Imports: zipcode,
+    httr,
+    dplyr,
+    stringr,
+    lubridate,
+    jsonlite,
+    magrittr
