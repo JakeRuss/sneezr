@@ -24,7 +24,7 @@ pollencast <- function(zip = NULL) {
   res <- httr::GET(url = api_url)
 
   # Throw an error if the API returns non 200 status code
-  stop_for_status(res)
+  httr::stop_for_status(res)
 
   # Create a list of data from returned json
   tmp_json <- res %>%
@@ -49,21 +49,21 @@ pollencast <- function(zip = NULL) {
 
   # Tidy weather forcast
   weather <- tmp_json$weatherForecast %>%
-    mutate(date          = lubridate::parse_date_time(x      = date,
-                                                      orders = "%m%d,%Y%I%M!%S%p"),
-           city          = tolower(city),
-           state         = tolower(state),
-           forecast.date = lubridate::parse_date_time(x      = forecast.date,
-                                                      orders = "%m%d,%Y%I%M!%S%p") %>% as.Date()) %>%
+    dplyr::mutate(date          = lubridate::parse_date_time(x      = date,
+                                                             orders = "%m%d,%Y%I%M!%S%p"),
+                  city          = tolower(city),
+                  state         = tolower(state),
+                  forecast.date = lubridate::parse_date_time(x      = forecast.date,
+                                                             orders = "%m%d,%Y%I%M!%S%p") %>% as.Date()) %>%
     dplyr::rename(weather.ts = date, temp.low = forecast.lowF, temp.high = forecast.highF,
            description.day = forecast.phraseDay, description.night = forecast.phraseNight)
 
   # Join pollen and weather data
   combined <- pollen %>%
-    inner_join(x = ., y = weather, by = c("zip", "city", "state", "forecast.date")) %>%
+    dplyr::inner_join(x = ., y = weather, by = c("zip", "city", "state", "forecast.date")) %>%
   # Extract and re-order columns
-  select(forecast.date, zip, city, state, pollen.count, predominant, pollen.ts,
-         temp.high, temp.low, description.day, description.night, weather.ts)
+  dplyr::select(forecast.date, zip, city, state, pollen.count, predominant, pollen.ts,
+                temp.high, temp.low, description.day, description.night, weather.ts)
 
   # Return the tidy data
   return(combined)
