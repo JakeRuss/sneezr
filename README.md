@@ -11,4 +11,6 @@ An R wrapper for Claritin's pollen count api
 - Reduce dependencies
 
 ## Usage
+```
 df <- pollencast(zip = 5digitzip)
+```
