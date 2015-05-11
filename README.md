@@ -5,6 +5,12 @@ An R wrapper for Claritin's pollen count api
 
 [Claritin's json feed](http://www.claritin.com/weatherpollenservice/weatherpollenservice.svc/getforecast/[zipcode])
 
+## Installation
+```
+# install.packages("devtools")
+devtools::install_github("jakeruss/sneezr")
+```
+
 ## Needs work:
 - Figure out a license compatible with Claritin's TOS
 - Better organize json parsing
