@@ -12,7 +12,7 @@ pollencast <- function(zip = NULL) {
   cleaned_zip <- zipcode::clean.zipcodes(zips = zip)
 
   # Throw an error for zip codes returned as NA or not 5 digits
-  if (nchar(cleaned_zip != 5) && is.na(cleaned_zip)) {
+  if (nchar(cleaned_zip) != 5 && is.na(cleaned_zip)) {
     stop("The provided zipcode is not acceptable.")
   }
 
