@@ -31,6 +31,9 @@ pollencast <- function(zip = NULL) {
     httr::content(as = "text") %>%
     # Parse the json into nested list
     jsonlite::fromJSON() %>%
+    # Claritin's json source is double encoded which means
+    # we need to parse the json text twice.
+    jsonlite::fromJSON() %>%
     # Un-nest and create data frames
     lapply(., data.frame, stringsAsFactors = FALSE)
 
