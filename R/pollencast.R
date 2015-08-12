@@ -18,10 +18,9 @@ pollencast <- function(zip = NULL) {
 
   # Build the url for Claritin's API
   base_url <- "http://www.claritin.com/"
-  app_url  <- "weatherpollenservice/weatherpollenservice.svc/getforecast/"
-  api_url  <- paste0(base_url, app_url, zip)
+  api_url  <- paste0(base_url, "webservice/allergyforecast.php")
 
-  res <- httr::GET(url = api_url)
+  res <- httr::POST(url = api_url, query = list(zip = cleaned_zip))
 
   # Throw an error if the API returns non 200 status code
   httr::stop_for_status(res)
@@ -29,7 +28,7 @@ pollencast <- function(zip = NULL) {
   # Create a list of data from returned json
   tmp_json <- res %>%
     # Extract the data from response object
-    httr::content() %>%
+    httr::content(as = "text") %>%
     # Parse the json into nested list
     jsonlite::fromJSON() %>%
     # Un-nest and create data frames
