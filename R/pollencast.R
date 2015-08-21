@@ -29,10 +29,11 @@ pollencast <- function(zip = NULL) {
   tmp_json <- res %>%
     # Extract the data from response object
     httr::content(as = "text") %>%
-    # Parse the json into nested list
-    jsonlite::fromJSON() %>%
-    # Claritin's json source is double encoded which means
+    # TEMP FIX: Remove the UTF-8 BOM until jsonlite is updated to 0.9.17
+    substring(., 4) %>%
+    # Claritin's json source is double encoded (serialized?) which means
     # we need to parse the json text twice.
+    jsonlite::fromJSON() %>%
     jsonlite::fromJSON() %>%
     # Un-nest and create data frames
     lapply(., data.frame, stringsAsFactors = FALSE)
