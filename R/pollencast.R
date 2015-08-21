@@ -51,7 +51,7 @@ pollencast <- function(zip = NULL) {
                                    x      = pollen.ts,
                                    orders = "%m%d,%Y%I%M!%S%p"),
                   forecast.date = seq.Date(from = as.Date(pollen.ts[1]),
-                                           to   = as.Date(pollen.ts[1]) + (nrow(pollen) - 1),
+                                           to   = as.Date(pollen.ts[1]) + 3,
                                            by   = 1))
 
   # Tidy weather forcast
