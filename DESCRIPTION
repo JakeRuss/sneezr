@@ -14,5 +14,5 @@ Imports: zipcode,
     dplyr,
     stringr,
     lubridate,
-    jsonlite (>= 0.9.16.9000),
+    jsonlite,
     magrittr
