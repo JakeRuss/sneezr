@@ -40,30 +40,34 @@ pollencast <- function(zip = NULL) {
 
   # Tidy the pollen count data
   pollen <- tmp_json$pollenForecast %>%
-    dplyr::mutate(city          = tolower(city),
-                  state         = tolower(state),
-                  pp            = stringr::str_trim(pp),
-                  timestamp     = lubridate::parse_date_time(x      = timestamp,
-                                                             orders = "%m%d,%Y%I%M!%S%p"),
-                  forecast.date = seq.Date(from = as.Date(timestamp[1]),
-                                           to   = as.Date(timestamp[1]) + 3,
-                                           by   = 1)) %>%
-    dplyr::rename(predominant = pp, pollen.ts = timestamp, pollen.count = forecast)
+    tidyr::unnest(col = forecast) %>%
+    dplyr::rename(predominant  = pp,
+                  pollen.count = forecast,
+                  pollen.ts    = timestamp) %>%
+    dplyr::mutate(city          = tolower(city)  %>% stringr::str_trim(),
+                  state         = tolower(state) %>% stringr::str_trim(),
+                  predominant   = stringr::str_trim(predominant),
+                  pollen.ts     = lubridate::parse_date_time(
+                                   x      = pollen.ts,
+                                   orders = "%m%d,%Y%I%M!%S%p"),
+                  forecast.date = seq.Date(from = as.Date(pollen.ts[1]),
+                                           to   = as.Date(pollen.ts[1]) + (nrow(pollen) - 1),
+                                           by   = 1))
 
   # Tidy weather forcast
-  weather <- tmp_json$weatherForecast %>%
-    dplyr::mutate(date          = lubridate::parse_date_time(x      = date,
-                                                             orders = "%m%d,%Y%I%M!%S%p"),
-                  city          = tolower(city),
-                  state         = tolower(state),
-                  forecast.date = lubridate::parse_date_time(x      = forecast.date,
-                                                             orders = "%m%d,%Y%I%M!%S%p") %>% as.Date()) %>%
-    dplyr::rename(weather.ts = date, temp.low = forecast.lowF, temp.high = forecast.highF,
-           description.day = forecast.phraseDay, description.night = forecast.phraseNight)
+  weather <- tmp_json$weatherForecast$forecast[[1]] %>%
+    dplyr::mutate(city          = tolower(tmp_json$weatherForecast$city) %>%
+                                    stringr::str_trim(),
+                  state         = tolower(tmp_json$weatherForecast$state) %>%
+                                    stringr::str_trim(),
+                  date          = substring(date, 1, 10) %>% as.Date(),
+                  weather.ts    = date[1] %>% as.Date()) %>%
+    dplyr::rename(forecast.date = date, temp.low = lowF, temp.high = highF,
+                  description.day = phraseDay, description.night = phraseNight)
 
   # Join pollen and weather data
   combined <- pollen %>%
-    dplyr::inner_join(x = ., y = weather, by = c("zip", "city", "state", "forecast.date")) %>%
+    dplyr::inner_join(x = ., y = weather, by = c("city", "state", "forecast.date")) %>%
   # Extract and re-order columns
   dplyr::select(forecast.date, zip, city, state, pollen.count, predominant, pollen.ts,
                 temp.high, temp.low, description.day, description.night, weather.ts)
