@@ -13,7 +13,7 @@ pollencast <- function(zip = NULL) {
 
   # Throw an error for zip codes returned as NA or not 5 digits
   if (nchar(cleaned_zip) != 5 && is.na(cleaned_zip)) {
-    stop("The provided zipcode is not acceptable.")
+    stop("Please supply a valid 5-digit zip code.")
   }
 
   # Build the url for Claritin's API
@@ -29,8 +29,6 @@ pollencast <- function(zip = NULL) {
   tmp_json <- res %>%
     # Extract the data from response object
     httr::content(as = "text") %>%
-    # TEMP FIX: Remove the UTF-8 BOM until jsonlite is updated to 0.9.17
-    substring(., 4) %>%
     # Claritin's json source is double encoded (serialized?) which means
     # we need to parse the json text twice.
     jsonlite::fromJSON() %>%
@@ -40,9 +38,8 @@ pollencast <- function(zip = NULL) {
 
   # Tidy the pollen count data
   pollen <- tmp_json$pollenForecast %>%
-    tidyr::unnest(col = forecast) %>%
+    tidyr::unnest(pollen.count = forecast) %>%
     dplyr::rename(predominant  = pp,
-                  pollen.count = forecast,
                   pollen.ts    = timestamp) %>%
     dplyr::mutate(city          = tolower(city)  %>% stringr::str_trim(),
                   state         = tolower(state) %>% stringr::str_trim(),
