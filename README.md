@@ -1,9 +1,10 @@
 # sneezr
-An R wrapper for Claritin's pollen count api
+An R wrapper for Pollen.com's Pollen Forecast API
 
-[Claritin's webapp](http://www.claritin.com/allergy-forecast/)
+## Disclaimer
 
-[Claritin's json feed](http://www.claritin.com/weatherpollenservice/weatherpollenservice.svc/getforecast/[zipcode])
+This package is not on CRAN and it is for personal use only. The package is not
+endorsed by Pollen.com and is only intended as a proof of concept.
 
 ## Installation
 ```
@@ -11,12 +12,7 @@ An R wrapper for Claritin's pollen count api
 devtools::install_github("jakeruss/sneezr")
 ```
 
-## Needs work:
-- Figure out a license compatible with Claritin's TOS
-- Better organize json parsing
-- Reduce dependencies
-
-## Usage
+## Example usage
 ```
 df <- pollencast(zip = 5digitzip)
 ```
