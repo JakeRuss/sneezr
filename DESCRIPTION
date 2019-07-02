@@ -1,11 +1,11 @@
 Package: sneezr
 Type: Package
 Title: Load Pollen Count Data into R
-Version: 0.0.0.9000
-Date: 2015-05-09
+Version: 0.0.1.9000
+Date: 2019-07-02
 Authors@R: person("Jake", "Russ", email = "jake.w.russ@gmail.com", role = c("aut", "cre"))
-Description: An R wrapper for Claritin's pollen count API.
-License: to be determined
+Description: An R wrapper for Accuweather's Pollen Forecast.
+License: TBD
 LazyData: TRUE
 URL: https://github.com/JakeRuss/sneezr
 BugReports: https://github.com/JakeRuss/sneezr/issues
@@ -13,6 +13,8 @@ Imports: zipcode,
     httr,
     dplyr,
     stringr,
-    lubridate,
+    readr,
     jsonlite,
-    magrittr
+    magrittr,
+    rlang
+RoxygenNote: 6.1.1
