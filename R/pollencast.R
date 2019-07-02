@@ -1,13 +1,13 @@
 #'Retrieve pollen count forecast
 #'
 #'@param zip five digit zip code
-#'@param user.agent user agent string (optional); otherwise uses httr's default user agent
+#'@param user_agent user agent string (optional); otherwise uses httr's default user agent
 #'@examples
 #'df  <- pollencast(zip = 20238)
 #'df2 <- pollencast(zip = "20238")
 #'@export
 
-pollencast <- function(zip = NULL, user.agent = NULL) {
+pollencast <- function(zip = NULL, user_agent = NULL) {
 
   # Format zip code
   cleaned_zip <- zipcode::clean.zipcodes(zips = zip)
